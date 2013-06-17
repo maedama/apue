@@ -15,6 +15,7 @@
 *.exe
 *.out
 *.app
+*.swp
 
 CMakeCache.txt
 CMakeFiles
