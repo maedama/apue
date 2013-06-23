@@ -17,6 +17,7 @@
   1. Calling abort
   1. Receipt of a signal
   1. Response of last thread to cancelleation request(?)
+
 ### atexit
 exitの際によばれるhandlerの登録(_exitではよばれない)。
 LIFOで最後に登録されたhandlerから順番によばれる
