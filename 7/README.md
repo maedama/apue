@@ -4,6 +4,7 @@
  1. 実行するのはkernel。execというシステムコールが定義されてる
   1. startup routinesがmainの前に実行される
    1. 環境変数とコマンドライン引数などをkernelからうけとって(多分)、mainを実行する
+
 ## 7.3 Process Termination
  1. 5 normal termination process
   1. return from main
