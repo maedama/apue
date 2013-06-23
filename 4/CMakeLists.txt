@@ -10,6 +10,5 @@ target_link_libraries(umask apue)
 add_executable(fig4-21 fig4-21.c)
 target_link_libraries(fig4-21 apue)
 
-
-
-
+add_executable(fig4-22 fig4-22.c)
+target_link_libraries(fig4-22 apue)
