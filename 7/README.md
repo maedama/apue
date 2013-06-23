@@ -67,3 +67,8 @@ _exit系のfunctionはbufferingされたIOの書き出し等の処理を一切�
  setjpmは(おそらく)関数のcallstackの位置などの情報を保存する。関数のcallstackはどんなに複雑な呼び出しになっていてもstackなので、巻き戻しのロジックは簡単という事だと思われる
 ## 7.11 getrlimit and setrlimit Functions
 ## 7.12 Summary
+ 関数のcallstackの挙動についてはもう少しきちっと理解したい。今のところの想像は下記
+ 1 : 関数を実行するためのbyteコード。static変数、global変数は一番topのメモリ領域に確保される。
+ 2 : mainから関数を実行していくと、それぞれ下位のstackにつまれていく。保存される情報は、auto変数とどこまで実行しているかとかの内容。新しく関数を実行したらこれらの情報をstackにのこしたまま新しく呼び出した関数の情報がstackにつまれる
+ 3 : 特定の関数がreturnしたらstackから情報をpopして、auto変数等のために確保していた領域はすぐさまfreeされる
+ 4 : mallocはこれらのstackとは別のheap領域にメモリを確保するので、明示的にfreeしないとだめだし、逆にかんすうがreturnsしても使える。
