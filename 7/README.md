@@ -60,7 +60,7 @@ _exit系のfunctionはbufferingされたIOの書き出し等の処理を一切�
 メモリをallocateする際はどこの領域にallocateするのか強く意識する必要が有る。
  1. char[BUFSIZE] : これはstack領域にallocateする。関数がreturnした段階ではもう使われては行けない領域。freeしなくてもメモリが解放される
  1. malloc : これはheap領域にallocateする。なので関数がreturnされたあとに参照されてもかまわない。一方でfreeしないとメモリが解放されないので注意。
- 1. static char[BUFSIZE]: これcompile phaseで初期化されて、(多分)かなり上位の空間にallocateされるのではないか?
+ 1. static char[BUFSIZE]: これcompile phaseで初期化されて、initialized data、ないしはuninitialized dataの領域にallocateされる(多分)。
 
 ## 7.9 Environment Variables
  1. getenv:(const char *name): 特定の環境変数の値を取得
