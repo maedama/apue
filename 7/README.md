@@ -69,10 +69,12 @@ _exit系のfunctionはbufferingされたIOの書き出し等の処理を一切�
  1. unsetenv(const char *name): remove env
 
 ## 7.10 setjmp and loginmp Functions
- 関数をこえたgotoはcでは許可されてない。でもこれをどうしてもやりたい場合にsetjmpをlongjmpを使う事が可能。
- longjmpをすると、それまでの関数のstackは全て捨てされられる。また、setjmpすると、どのstackまで戻ってくればいいか、情報を保存しておくことができ、これをlongjmpの際にわたすことで
- 戻ってくる場所を明示できる(おそらく)。関数のcallstackはどんなに複雑な呼び出しになっていてもstackなので、巻き戻しのロジックは簡単という事だと思われる。
- 一方で、変数の値はかわってしまってるので特にcompile optionを指定しないと最後に評価された値になり、ここは直感的ではない。でもcompile optionを指定すると、inline展開されるので、このへんはの値もrollbackされる。
+ 関数をこえたgotoはcでは許可されてない。でもこれをどうしてもやりたい場合にsetjmpとlongjmpを使う事が可能。
+ setjmpでstackのどの位置にjumpしたいのかあらかじめてsetしておき、longjmpでsetjmpのかえり値からとれる、値を指定する事で、jumpすることができる。longjmpをすると、とんだstack以降のstackは全て捨てされられる。
+ 関数のcallstackはどんなに複雑な呼び出しになっていてもstackなので、このような巻き戻しのロジックは簡単だと思われる。
+ stackの特定の領域にjumpするだけなので、コードの呼び出し時点の変数の値などが取得できる事は担保されない。
+ 例として、setjmpしたあとに、すぐ変数を変更して、その後に関数呼び出しをして、longjmpで戻ってきた場合、setjmpの位置に戻ってくる事はできるが、そのstackのメモリ領域はsetjmpしたあとに改変されており、この改変をrollbackすることは保証されない(というかされない)。
+ 一方で、compile optionを指定することで、関数をinline展開し、その副時的効果で、呼び出し時の変数の値を保証することもできる模様。
 
 ## 7.11 getrlimit and setrlimit Functions
 
