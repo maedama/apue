@@ -68,7 +68,7 @@ _exit系のfunctionはbufferingされたIOの書き出し等の処理を一切�
  1. putenv(char *str): name=valueを引数にとり、environment listに加える or overwride
  1. unsetenv(const char *name): remove env
 
-## 7.10 setjmp and loginmp Functions
+## 7.10 setjmp and longjmp Functions
  関数をこえたgotoはcでは許可されてない。でもこれをどうしてもやりたい場合にsetjmpとlongjmpを使う事が可能。
  setjmpでstackのどの位置にjumpしたいのかあらかじめてsetしておき、longjmpでsetjmpのかえり値からとれる、値を指定する事で、jumpすることができる。longjmpをすると、とんだstack以降のstackは全て捨てされられる。
  関数のcallstackはどんなに複雑な呼び出しになっていてもstackなので、このような巻き戻しのロジックは簡単だと思われる。
