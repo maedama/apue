@@ -39,7 +39,29 @@ forkするとfdは今日有される。加えてfdがさすfiletableも共有さ
 
  これは基本的に、子が別のプログラムをすぐに実行する(like in shell)用途専用
 ##8-5. exit Function
+### Handling child termination
+親はwaitpid等を使う事で子がどのように終了したか知る事ができる。
+
+ 1. WIFEXITED : 子がexit関数等で正常に終了している場合はTRUEそうでなければFALSE. WEXITSTATUSでstatusを取得できる
+ 1. WIFSIGNALED : signalを受けてそれを子がhandlingせずに終了した場合 TRUE. WTERMSIGでsignalを取得できる
+ 1. WIFSTOPPED : WSTOPSIGで子をとめたsignalを取得できる
+
+### pid of child whose parent is already terminated
+親がさきに終了してしまった子でgetpidをすると何がかえってくるのか。答えは1。unixのinitプロセスが親を失った全てのプロセスの養父(母)になる。
+
+### handling child that terminates before waitpid(and other related function)
+親がwaitpidとかをcallする前に子がしんでしまったらどうなるのか。これはkernelが覚えていてくれる。記憶してくれる者は下記
+ 1. 終了status
+ 1. pid
+ 1. cpu time
+これらはzonbieプロセスと呼ばれる
+
 ##8-6. wait and waitpid Functions
+### wait
+pid_t wait(int *stataloc)
+子のいずれかのプロセスが終了するまでblockし、一つでも終了したらpidを返す。(もし全て終了してたら即座にエラー)
+statalocはintのpointerで、ここに終了statusが格納される。気にしないならNULLを指定
+### 
 ##8-7. waitid Function
 ##8-8. wait3 and wait4 Functions
 ##8-9. Race Conditions
