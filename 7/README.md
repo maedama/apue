@@ -32,15 +32,17 @@ _exit系のfunctionはbufferingされたIOの書き出し等の処理を一切�
 ## 7.6 Memory Layout of a C Program
  1. Cのメモリの構成
   1. Text Segement(マシン語の命令。多分頻繁に使われるやつは、共有になってる。*.so?)
-  1. initialized data (long max = 99とか)
-  1. uninitialized data(bss): (long sum([100])とか
+  1. initialized data: compile時に初期化されてるもの (long max = 99とか)
+  1. uninitialized data(bss):compile時には初期化されてないもの (long sum([100])とか
   1. stack (関数のコールスタック): 変数の現在値、どこまで実行したか等が保存されてる。これにより同じ関数をrecursiveに実行しても変数の値が混ざったりする事はない
   1. heap
+
 ## 7.7 Shared Libraries
  多くの関数で共有できるコードをデータとして共有する仕組み。これにより以下のような利点が有る
   1. 個々の実行可能ファイルのサイズが小さくなる
   1. updateが簡単
  compile時のオプションでshared libraryを使うか使わないかは選べる
+
 ## 7.8 Memory Allocation 
  1. void *malloc(size_t size) : 指定したメモリを確保する(確保した領域はindetermined)
  2. void *calloc(size_t nobj, size_t size) : 指定したサイズのオブジェクトを指定した個数分
@@ -59,17 +61,21 @@ _exit系のfunctionはbufferingされたIOの書き出し等の処理を一切�
  1. char[BUFSIZE] : これはstack領域にallocateする。関数がreturnした段階ではもう使われては行けない領域。freeしなくてもメモリが解放される
  1. malloc : これはheap領域にallocateする。なので関数がreturnされたあとに参照されてもかまわない。一方でfreeしないとメモリが解放されないので注意。
  1. static char[BUFSIZE]: これcompile phaseで初期化されて、(多分)かなり上位の空間にallocateされるのではないか?
+
 ## 7.9 Environment Variables
  1. getenv:(const char *name): 特定の環境変数の値を取得
  1. setenv(const char *name, const char *value, intrewrite): overwrideするかしないか選べる
  1. putenv(char *str): name=valueを引数にとり、environment listに加える or overwride
  1. unsetenv(const char *name): remove env
+
 ## 7.10 setjmp and loginmp Functions
  関数をこえたgotoはcでは許可されてない。でもこれをどうしてもやりたい場合にsetjmpをlongjmpを使う事が可能。
  longjmpをすると、それまでの関数のstackは全て捨てされられる。また、setjmpすると、どのstackまで戻ってくればいいか、情報を保存しておくことができ、これをlongjmpの際にわたすことで
  戻ってくる場所を明示できる(おそらく)。関数のcallstackはどんなに複雑な呼び出しになっていてもstackなので、巻き戻しのロジックは簡単という事だと思われる。
  一方で、変数の値はかわってしまってるので特にcompile optionを指定しないと最後に評価された値になり、ここは直感的ではない。でもcompile optionを指定すると、inline展開されるので、このへんはの値もrollbackされる。
+
 ## 7.11 getrlimit and setrlimit Functions
+
 ## 7.12 Summary
  関数のcallstackの挙動についてはもう少しきちっと理解したい。今のところの想像は下記
  1 : 関数を実行するためのbyteコード。static変数、global変数は一番topのメモリ領域に確保される。
