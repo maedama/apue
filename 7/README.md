@@ -72,8 +72,9 @@ _exit系のfunctionはbufferingされたIOの書き出し等の処理を一切�
  関数をこえたgotoはcでは許可されてない。でもこれをどうしてもやりたい場合にsetjmpとlongjmpを使う事が可能。
  setjmpでstackのどの位置にjumpしたいのかあらかじめてsetしておき、longjmpでsetjmpのかえり値からとれる、値を指定する事で、jumpすることができる。longjmpをすると、とんだstack以降のstackは全て捨てされられる。
  関数のcallstackはどんなに複雑な呼び出しになっていてもstackなので、このような巻き戻しのロジックは簡単だと思われる。
- stackの特定の領域にjumpするだけなので、コードの呼び出し時点の変数の値などが取得できる事は担保されない。
- 例として、setjmpしたあとに、すぐ変数を変更して、その後に関数呼び出しをして、longjmpで戻ってきた場合、setjmpの位置に戻ってくる事はできるが、そのstackのメモリ領域はsetjmpしたあとに改変されており、この改変をrollbackすることは保証されない(というかされない)。
+### caveats
+ stackの特定の領域にjumpするだけなので、setjmpの呼び出し時点のlocal変数の値などが取得できる事は担保されない。
+ 例として、setjmpしたあとに、すぐlocal変数を変更して、その後に関数呼び出しをして、その呼び出しの中でlongjmpで戻ってきた場合、setjmpの位置に戻ってくる事はできるが、そのstackのメモリ領域はsetjmpしたあとに改変されており、この改変をrollbackすることは保証されない(というかされない)。
  一方で、compile optionを指定することで、関数をinline展開し、その副時的効果で、呼び出し時の変数の値を保証することもできる模様。
 
 ## 7.11 getrlimit and setrlimit Functions
