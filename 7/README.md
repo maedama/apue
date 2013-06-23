@@ -6,6 +6,7 @@
    1. 環境変数とコマンドライン引数などをkernelからうけとって(多分)、mainを実行する
 
 ## 7.3 Process Termination
+### termination condition
  1. 5 normal termination process
   1. return from main
   1. exit called
@@ -16,11 +17,12 @@
   1. Calling abort
   1. Receipt of a signal
   1. Response of last thread to cancelleation request(?)
- 1. atexit : exitの際によばれるhandlerの登録(_exitではよばれない)。
-  1.LIFO
+### atexit
+exitの際によばれるhandlerの登録(_exitではよばれない)。
+LIFOで最後に登録されたhandlerから順番によばれる
 
-マルチスレッドかそうじゃないかで気にしないといけない事が多い。
-_exit系のfunctionはbufferingされたIOの書き出し等の処理を一切せずにkernelにreturnする(bufferingするのはcのレイヤー(stdio)だと思うが、あってたっけ？)
+_exit系のfunctionはbufferingされたIOの書き出し等の処理を一切せずにkernelにreturnする。(多分stdioがatexitでfsyncするような実装になっている)
+
 ## 7.4 Command Line Arguments
 特にいうべきことはなし。cのstartup routineがわたしてくれる。
 ## 7.5 Environement List
