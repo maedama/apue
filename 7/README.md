@@ -62,9 +62,9 @@ _exit系のfunctionはbufferingされたIOの書き出し等の処理を一切�
  1. unsetenv(const char *name): remove env
 ## 7.10 setjmp and loginmp Functions
  関数をこえたgotoはcでは許可されてない。でもこれをどうしてもやりたい場合にsetjmpをlongjmpを使う事が可能。
- longjmpをすると、それまでの関数のstackは全て捨てされられる。また、setjmpを指定する際に、local変数の状態等を保存しておくことが可能で、これをlongjmpの際にわたすことで
- local変数の値を再現してコードを実行できる。
- setjpmは(おそらく)関数のcallstackの位置などの情報を保存する。関数のcallstackはどんなに複雑な呼び出しになっていてもstackなので、巻き戻しのロジックは簡単という事だと思われる
+ longjmpをすると、それまでの関数のstackは全て捨てされられる。また、setjmpすると、どのstackまで戻ってくればいいか、情報を保存しておくことができ、これをlongjmpの際にわたすことで
+ 戻ってくる場所を明示できる(おそらく)。関数のcallstackはどんなに複雑な呼び出しになっていてもstackなので、巻き戻しのロジックは簡単という事だと思われる。
+ 一方で、変数の値はかわってしまってるので特にcompile optionを指定しないと最後に評価された値になり、ここは直感的ではない。でもcompile optionを指定すると、inline展開されるので、このへんはの値もrollbackされる。
 ## 7.11 getrlimit and setrlimit Functions
 ## 7.12 Summary
  関数のcallstackの挙動についてはもう少しきちっと理解したい。今のところの想像は下記
